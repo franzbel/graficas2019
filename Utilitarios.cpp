@@ -64,10 +64,10 @@ void savebmp(const char* filename, int w, int h, int dpi, ColorRGB* data)
 	fwrite(bmpinfoheader, 1, 40, f);
 	for (int i = 0; i < k; i++)
 	{
-		ColorRGB rgb =  data[i];
-		double red   = (data[i].r) * 255;
-		double green = (data[i].g) * 255;
-		double blue  = (data[i].b) * 255;
+		ColorRGB rgb =  data[i]; 
+		double red   = (data[i].r > 1.0 ? 1.0 : data[i].r) * 255;
+		double green = (data[i].g > 1.0 ? 1.0 : data[i].g) * 255;
+		double blue  = (data[i].b > 1.0 ? 1.0 : data[i].b) * 255;
 		unsigned char color[3] = { (int)floor(blue), (int)floor(green), (int)floor(red) };
 		fwrite(color, 1, 3, f);
 	}
