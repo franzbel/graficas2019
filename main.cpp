@@ -12,19 +12,13 @@ using namespace std;
 #include "Utilitarios.h"
 #include "LuzPuntual.h"
 
+#include "Triangulo.h"
 
 // #include "ObjetoGeometrico.h"
 
 using namespace std;
 
-double acotar(double n){
-    if ( n > 1.0 ) {
-        cout<<n<<endl;
-        return 1.0;
-    } else {
-        return n;
-    }
-}
+
 ColorRGB obtenerColorPixel(const Rayo& r, vector<ObjetoGeometrico*> objetos, LuzPuntual luz, LuzPuntual luz_ambiente){
     
     ColorRGB color;
@@ -75,24 +69,39 @@ int main() {
     LuzPuntual luz_ambiente(1.0, 1.0, 1.0, 0.0, 0.0, 0.0);
     // ESCENA--------------------------------------------------------------------------------------------
     Punto3D centro1(0.0, 0.0, -400.0);
-    double radio1 = 120;
+    double radio1 = 200;
     Esfera esfera1(centro1, radio1);   
     esfera1.establecerColor(0.30, 0.20, 0.0);
 
-    Punto3D centro2(150.0, 50.0, -200.0);
-    double radio2 = 100;
-    Esfera esfera2(centro2, radio2);   
-    esfera2.establecerColor(0.0, 0.0, 0.49);
+    // Punto3D centro2(150.0, 0.0, -200.0);
+    // double radio2 = 120;
+    // Esfera esfera2(centro2, radio2);   
+    // esfera2.establecerColor(0.0, 0.0, 0.49);
+
+    Punto3D A1( -300, 200, -1600);     
+    Punto3D B1( -300, -400, 0);
+    Punto3D C1( 300, 200, -1600);
+    Triangulo triangulo1( A1, B1, C1 );
+    triangulo1.establecerColor( 0.10, 0.20, 0.30 );
+
+    Punto3D A2( -300, -400, 0);     
+    Punto3D B2( 300, -400, 0);
+    Punto3D C2( 300, 200, -1600);
+    Triangulo triangulo2( A2, B2, C2 );
+    triangulo2.establecerColor( 0.10, 0.20, 0.30 );
 
 
     vector<ObjetoGeometrico*> escena;
     escena.push_back(&esfera1);
-    escena.push_back(&esfera2);
-
+    // escena.push_back(&esfera2);
+    escena.push_back(&triangulo1);
+    escena.push_back(&triangulo2);
 
     // VIEWPLANE
-    int hres = 800;
-    int vres = 600;
+    // int hres = 800;
+    // int vres = 600;
+    int hres = 1200;
+    int vres = 800;
     double s = 1.0;
     ViewPlane vp(hres, vres, s);
 
