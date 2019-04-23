@@ -29,7 +29,7 @@ bool Esfera::hayImpacto(const Rayo& rayo, double& tmin, Vector3D& n, Punto3D& q)
        double denominador = 2.0 * a;
        // smaller root
        t = (-b - disc_eval)/denominador;
-       if( t > 0.000001 )
+       if( t >  0.00000001 )
        {
            q = rayo.o + t * rayo.d; 
            n = (temp + t * rayo.d) / r;
@@ -38,7 +38,7 @@ bool Esfera::hayImpacto(const Rayo& rayo, double& tmin, Vector3D& n, Punto3D& q)
        }
        // larger root
        t = (-b + disc_eval)/denominador;
-       if( t > 0.000001 )
+       if( t >  0.00000001 )
        {
            q = rayo.o + t * rayo.d; 
            n = (temp + t * rayo.d) / r;

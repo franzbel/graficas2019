@@ -41,14 +41,14 @@ bool Triangulo::hayImpacto(const Rayo& r, double& tmin, Vector3D& n, Punto3D& q)
     {
         return false;
     }
-    if ( t < 0.0000001)
+    if ( t < 0.00000001)
     {
         return false;
     }
     tmin = t;
     n = (( B - A )^( C - A)).hat();
     q = r.o + t * r.d;
-    n.mostrar_vector();
+    // n.mostrar_vector();
     return true;
 }
 
