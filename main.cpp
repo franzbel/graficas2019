@@ -48,36 +48,36 @@ ColorRGB obtenerColorPixel(const Rayo& r, vector<ObjetoGeometrico*> objetos, Luz
             // color.g = objetos[i]->obtenerColor().g * luz.color.g * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().g * luz.color.g * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),10000);
             // color.b = objetos[i]->obtenerColor().b * luz.color.b * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().b * luz.color.b * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),10000);
             
+            
             // color.r = objetos[i]->obtenerColor().r * luz_ambiente.color.r;
             // color.g = objetos[i]->obtenerColor().g * luz_ambiente.color.g;
             // color.b = objetos[i]->obtenerColor().b * luz_ambiente.color.b;
-            color.r = objetos[i]->obtenerColor().r * luz_ambiente.color.r;
-            color.g = objetos[i]->obtenerColor().g * luz_ambiente.color.g;
-            color.b = objetos[i]->obtenerColor().b * luz_ambiente.color.b;
 
-            tmin = t;
+
+            color.r = objetos[i]->obtenerColor().r * luz_ambiente.color.r + objetos[i]->obtenerColor().r * luz.color.r * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().r * luz.color.r * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
+            color.g = objetos[i]->obtenerColor().g * luz_ambiente.color.g + objetos[i]->obtenerColor().g * luz.color.g * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().g * luz.color.g * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
+            color.b = objetos[i]->obtenerColor().b * luz_ambiente.color.b + objetos[i]->obtenerColor().b * luz.color.b * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().b * luz.color.b * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
+
+            
+            
 
 
             double t_sombra;
             double t_min_sombra = 2000000;
             Vector3D n_sombra;
             Punto3D q_sombra;
-            Rayo rayo_sombra(q, (luz.posicion - q).hat()) ;
+            Rayo rayo_sombra(q, (luz.posicion - q)) ;
             for (int j = 0; j < objetos.size(); j++) {
-                if (!(objetos[j]->hayImpacto(rayo_sombra, t_sombra, n_sombra, q_sombra) && t_sombra < t_min_sombra) == false ) {
-                    color.r = objetos[i]->obtenerColor().r * luz_ambiente.color.r + objetos[i]->obtenerColor().r * luz.color.r * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().r * luz.color.r * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
-                    color.g = objetos[i]->obtenerColor().g * luz_ambiente.color.g + objetos[i]->obtenerColor().g * luz.color.g * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().g * luz.color.g * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
-                    color.b = objetos[i]->obtenerColor().b * luz_ambiente.color.b + objetos[i]->obtenerColor().b * luz.color.b * std::max(0.0, n * (luz.posicion - q).hat() ) + objetos[i]->obtenerColor().b * luz.color.b * pow(std::max(0.0, n * ((-1)*r.d + (luz.posicion - q).hat()).hat() ),100);
+                if ((objetos[j]->hayImpacto(rayo_sombra, t_sombra, n_sombra, q_sombra) && t_sombra < t_min_sombra)) {
+                    color.r = objetos[i]->obtenerColor().r * luz_ambiente.color.r;
+                    color.g = objetos[i]->obtenerColor().g * luz_ambiente.color.g;
+                    color.b = objetos[i]->obtenerColor().b * luz_ambiente.color.b;
                     t_min_sombra = t_sombra;
                 }
             }
-
-
-
+            tmin = t;
         }
     }
-    
-    
     return color;
 }
 
@@ -86,7 +86,7 @@ ColorRGB obtenerColorPixel(const Rayo& r, vector<ObjetoGeometrico*> objetos, Luz
 int main() {
 
     // LUZ----------------------------------------------------------------------------------------------
-    LuzPuntual luz(1.0, 1.0, 1.0, 300.0, 800.0, -400.0);
+    LuzPuntual luz(1.0, 1.0, 1.0, 500.0, 500.0, -400.0);
     LuzPuntual luz_ambiente(1.0, 1.0, 1.0, 0.0, 0.0, 0.0);
     // ESCENA--------------------------------------------------------------------------------------------
     Punto3D centro1(0.0, 0.0, -400.0);
@@ -94,7 +94,7 @@ int main() {
     Esfera esfera1(centro1, radio1);   
     esfera1.establecerColor(0.30, 0.20, 0.0);
 
-    // Punto3D centro2(150.0, 280.0, -500.0);
+    // Punto3D centro2(250.0, 280.0, -400.0);
     // double radio2 = 100;
     // Esfera esfera2(centro2, radio2);   
     // esfera2.establecerColor(0.0, 0.0, 0.49);
@@ -112,6 +112,13 @@ int main() {
     triangulo2.establecerColor( 0.10, 0.20, 0.30 );
 
 
+
+    Punto3D A3( -300, 0, 0);     
+    Punto3D B3( 300, 0, 0);
+    Punto3D C3( 300, 200, -500);
+    Triangulo triangulo3( A3, B3, C3 );
+    triangulo3.establecerColor( 0.60, 0.20, 0.30 );
+
     // Punto3D A(0,-800,0);
     // Vector3D v(0.8,0.4,0.7);
     // Plano p(A,v.hat());
@@ -126,6 +133,7 @@ int main() {
     escena.push_back(&esfera1);
     escena.push_back(&triangulo1);
     escena.push_back(&triangulo2);
+    escena.push_back(&triangulo3);
 
     // VIEWPLANE
     // int hres = 800;
